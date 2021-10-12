@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 /*
@@ -13,17 +11,45 @@ Example: Dictionary[3.75, List[Dictionary["FUNCTION": "MOLE", "X":"1", "Y":"5", 
 
 public class PatternParser
 {
+    public enum Paradigm { Time , Progression  }
+
+    private static Paradigm paradigm;
+
+    public Paradigm GetParadigm()
+    {
+        return paradigm;
+    }
+
+    private static void SetParadigm(Paradigm value)
+    {
+        paradigm = value;
+    }
+
+    private static int moleCount;
+
+    public int GetMoleCount()
+    {
+        return moleCount;
+    }
+
+    public void SetMoleCount(int value)
+    {
+        moleCount = value;
+    }
+
     // Parses the pattern file into a readable file for the PatternInterface.
     public Dictionary<float, List<Dictionary<string, string>>> ParsePattern(string[] patternStrings)
     {
         Dictionary<float, List<Dictionary<string, string>>> parsedPattern = new Dictionary<float, List<Dictionary<string, string>>>();
         float playTime = 0f;
         float moleDelay = 0f;
+        float tempLifetime = 0f;
 
         // For each line in the file.
         foreach (string line in patternStrings)
         {
             string uncommentedLine = line;
+
             // Removes the comments. If the line is empty, ignores the line.
             if (line == "") continue;
             uncommentedLine = RemoveComments(line);
@@ -40,20 +66,33 @@ public class PatternParser
             // If property = "WAIT", adds duration to the play time and ignores the rest.
             if (keyValue[0] == "WAIT")
             {
-                float waitTime = float.Parse(extractedProperties["TIME"], System.Globalization.CultureInfo.InvariantCulture);
-                playTime += waitTime;
+                string[] parameterValue = uncommentedLine.Split(new char[] { '(', ')', '=' });
+                if (parameterValue[1] == "TIME")
+                {
+                    float waitTime = float.Parse(extractedProperties["TIME"], System.Globalization.CultureInfo.InvariantCulture);
+                    playTime += waitTime;
+                }
+                else if(parameterValue[1] == "HIT")
+                {
+                    SetParadigm(Paradigm.Progression);
+                    playTime += tempLifetime;
+                }
                 continue;
             }
             else if (keyValue[0] == "MOLE")
             {
+                moleCount++;
+                SetMoleCount(moleCount);
+
                 // If property = "MOLE", checks if it has the property STARTDELAY and if it does, takes it into account.
-                if(extractedProperties.ContainsKey("STARTDELAY"))
+                if (extractedProperties.ContainsKey("STARTDELAY"))
                 {
                     tempPlayTime += float.Parse(extractedProperties["STARTDELAY"], System.Globalization.CultureInfo.InvariantCulture);
                     extractedProperties.Remove("STARTDELAY");
                 }
 
                 moleDelay = tempPlayTime + float.Parse(extractedProperties["LIFETIME"], System.Globalization.CultureInfo.InvariantCulture);
+                tempLifetime = float.Parse(extractedProperties["LIFETIME"], System.Globalization.CultureInfo.InvariantCulture);
             }
 
             // Add the extracted property to the dictionary
@@ -99,7 +138,14 @@ public class PatternParser
         foreach (Match match in matches)
         {
             string[] parameterValue = match.ToString().Split('=');
-            properties.Add(parameterValue[0], parameterValue[1]);
+            if (parameterValue.Length == 2)
+            {
+                properties.Add(parameterValue[0], parameterValue[1]);
+            }
+            else if (parameterValue.Length == 1)
+            {
+                properties.Add(parameterValue[0], "null");
+            }
         }
         return properties;
     }

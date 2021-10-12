@@ -16,7 +16,7 @@ public abstract class Mole : MonoBehaviour
     public enum MolePopAnswer {Ok, Fake, Expired, Disabled, Paused}
 
     // The states may be reduced to 3 - 4 (by removing Popping, enabling...), however this could reduce the control over the Mole
-    protected enum States {Disabled, Enabled, Expired, Popping, Enabling, Disabling}
+    public enum States {Disabled, Enabled, Expired, Popping, Popped, Enabling, Disabling}
 
     [SerializeField]
     private float disableCooldown = 3f;
@@ -89,6 +89,10 @@ public abstract class Mole : MonoBehaviour
     public int GetId()
     {
         return id;
+    }
+    public States GetState()
+    {
+        return state;
     }
 
     public bool CanBeActivated()
@@ -213,9 +217,9 @@ public abstract class Mole : MonoBehaviour
     }
     protected virtual void PlayPop() 
     {
-        ChangeState(States.Disabled);
+        ChangeState(States.Popped);
     }
-
+     
     private void ChangeState(States newState)
     {
         if (newState == state)
