@@ -85,7 +85,7 @@ Material:
     - _GlossyReflections: 1
     - _GrassCut: 0
     - _GrassSaturation: 2
-    - _GrassShading: 0.7
+    - _GrassShading: 0.742
     - _GrassThinness: 0.65
     - _GrassThinnessIntersection: 0.77
     - _Metallic: 0
@@ -97,9 +97,9 @@ Material:
     - _OffsetValue: 0.45
     - _Parallax: 0.02
     - _RTEffect: 0
-    - _RimMax: 0.52
-    - _RimMin: 0.4
-    - _RimPower: 4.2
+    - _RimMax: 0.499
+    - _RimMin: 0.237
+    - _RimPower: 1.2
     - _ShadowFuziness: 1
     - _ShadowMax: 0
     - _SmoothnessTextureChannel: 0

@@ -35,7 +35,7 @@ Material:
     - Thickness: 0.37
     - _ColorDiff: -0.55
     - _ColorDiffOffset: -0.1
-    - _Coverage: 0.01
+    - _Coverage: 0.03
     - _CoverageOffset: -0.34
     - _CutHeight: 1627
     - _CutHeight2: 1285
@@ -43,7 +43,7 @@ Material:
     - _Density: 0.00024
     - _FogFactor: -2.9
     - _FogUnity: 1
-    - _HorizonFactor: 0.18
+    - _HorizonFactor: 0.081
     - _TranspOffset: -0.01
     - _Transparency: 0.51
     - pointLightPower: 0
@@ -55,7 +55,7 @@ Material:
     - _LightingControl: {r: 1, g: 1, b: -1, a: 0}
     - _ShadowColor: {r: 0.23921569, g: 0.23921569, b: 0.31764707, a: 0.27450982}
     - _SunColor: {r: 0.9019608, g: 0.9019608, b: 0.9019608, a: 0.078431375}
-    - _Velocity1: {r: 12.912043, g: 0.0000015392988, b: 0, a: 0.09038488}
-    - _Velocity2: {r: 48.644974, g: 0.0000057989237, b: 0, a: 2}
+    - _Velocity1: {r: 10.078496, g: -0.5317982, b: 0, a: 0.07427384}
+    - _Velocity2: {r: 24.16578, g: -0.6304438, b: 0, a: 2}
     - pointLightColor: {r: 1, g: 1, b: 1, a: 1}
-    - pointLightPos: {r: -1632.1686, g: 698.4233, b: -1346.516, a: 0}
+    - pointLightPos: {r: -763.60254, g: 625.70953, b: -2281.429, a: 0}
