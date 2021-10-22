@@ -79,27 +79,27 @@ Material:
     - _FadeAmplitude: 28
     - _FadeDistance: 16
     - _FadeDistanceEnd: 0
-    - _FadeDistanceStart: 100
+    - _FadeDistanceStart: 1000
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _GrassCut: 0
-    - _GrassSaturation: 2
-    - _GrassShading: 0.742
-    - _GrassThinness: 0.65
-    - _GrassThinnessIntersection: 0.77
+    - _GrassSaturation: 0.66
+    - _GrassShading: 0.102
+    - _GrassThinness: 1.14
+    - _GrassThinnessIntersection: 1.02
     - _Metallic: 0
-    - _MinimumNumberStacks: 5.27
+    - _MinimumNumberStacks: 5.8
     - _Mode: 0
     - _NoisePower: 3
-    - _NumberOfStacks: 5
+    - _NumberOfStacks: 14.4
     - _OcclusionStrength: 1
     - _OffsetValue: 0.45
     - _Parallax: 0.02
     - _RTEffect: 0
     - _RimMax: 0.499
     - _RimMin: 0.237
-    - _RimPower: 1.2
+    - _RimPower: 0.76
     - _ShadowFuziness: 1
     - _ShadowMax: 0
     - _SmoothnessTextureChannel: 0
@@ -119,6 +119,6 @@ Material:
     - _GroundColor: {r: 0.65300006, g: 0.63272053, b: 0.63272053, a: 1}
     - _OffsetVector: {r: 0, g: 0, b: 0, a: 0}
     - _PJShadowColor: {r: 0, g: 0, b: 0, a: 1}
-    - _ProjectedShadowColor: {r: 0.078431375, g: 0.24705882, b: 0.05490196, a: 1}
+    - _ProjectedShadowColor: {r: 0.12244904, g: 1, b: 0, a: 1}
     - _RimColor: {r: 0.11879729, g: 0.14899999, b: 0.07248648, a: 1}
-    - _SelfShadowColor: {r: 0.41568628, g: 0.43137255, b: 0.36078432, a: 1}
+    - _SelfShadowColor: {r: 0.41568625, g: 0.4313725, b: 0.3607843, a: 1}
