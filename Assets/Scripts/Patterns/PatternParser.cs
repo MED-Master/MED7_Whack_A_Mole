@@ -32,7 +32,7 @@ public class PatternParser
         return moleCount;
     }
 
-    public void SetMoleCount(int value)
+    private void SetMoleCount(int value)
     {
         moleCount = value;
     }
@@ -44,6 +44,7 @@ public class PatternParser
         float playTime = 0f;
         float moleDelay = 0f;
         float tempLifetime = 0f;
+        SetMoleCount(0);
 
         // For each line in the file.
         foreach (string line in patternStrings)
