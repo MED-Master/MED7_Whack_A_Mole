@@ -140,15 +140,12 @@ public class PatternPlayer: MonoBehaviour
         foreach (var moleCoord in listMoleId)
         {
             var moles = wallManager.GetMoles();
-            int moleCount = patternParser.GetMoleCount();
-            Mole mole;
+            Mole mole = moles[moleCoord];
+            var spawnOrder = mole.GetSpawnOrder();
 
-            int moleId = Convert.ToInt32(string.Format("{0}{1}", Id, moleCoord));
-
-            if (!tempMolesList.ContainsKey(moleId))
+            if (spawnOrder + 1 == Id)
             {
-                mole = moles[moleCoord];
-                //tempMolesList.Add(new KeyValuePair<int, Mole>(moleId, mole));
+                int moleId = Convert.ToInt32(string.Format("{0}{1}", Id, moleCoord));
                 tempMolesList.Add(moleId, mole);
                 Id++;
             }
