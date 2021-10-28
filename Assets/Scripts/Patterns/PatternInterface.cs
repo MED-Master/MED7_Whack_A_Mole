@@ -18,6 +18,18 @@ public class PatternInterface : MonoBehaviour
     private LoggerNotifier loggerNotifier;
     private float randVar = 0f;
 
+    private static List<int> listMoleId = new List<int>();
+
+    public List<int> GetListMoleId()
+    {
+        return listMoleId;
+    }
+
+    public void SetListMoleId(int value)
+    {
+        listMoleId.Add(value);
+    }
+    
     void Awake()
     {
         patternPlayer = FindObjectOfType<PatternPlayer>();
@@ -213,6 +225,7 @@ public class PatternInterface : MonoBehaviour
     private void SetMole(string xIndex, string yIndex, string lifeTime)
     {
         int moleId = ((int.Parse(xIndex)) * 100) + (int.Parse(yIndex));
+        SetListMoleId(moleId);
         wallManager.ActivateMole(moleId, ParseFloat(lifeTime), gameDirector.GetMoleExpiringDuration(), false);
     }
 
