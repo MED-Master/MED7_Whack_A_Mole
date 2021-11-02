@@ -89,7 +89,7 @@ Material:
     - _GrassThinness: 1.14
     - _GrassThinnessIntersection: 1.02
     - _Metallic: 0
-    - _MinimumNumberStacks: 5.8
+    - _MinimumNumberStacks: 5.9
     - _Mode: 0
     - _NoisePower: 3
     - _NumberOfStacks: 14.4
@@ -109,8 +109,8 @@ Material:
     - _TilingN2: 1.91
     - _TilingN3: 1
     - _UVSec: 0
-    - _WindForce: 0.09
-    - _WindMovement: 0.07
+    - _WindForce: 0.12
+    - _WindMovement: 0.19
     - _ZWrite: 1
     - __NumberOfStacks: 1
     m_Colors:
