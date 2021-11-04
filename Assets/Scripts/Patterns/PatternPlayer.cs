@@ -9,7 +9,7 @@ Class dedicated to play the pattern at runtime from the dictionary given by the 
 Calls the PatternInterface to call the different elements and translate the dictionary into concrete actions;
 */
 
-public class PatternPlayer: MonoBehaviour
+public class PatternPlayer : MonoBehaviour
 {
     private Dictionary<float, List<Dictionary<string, string>>> pattern = new Dictionary<float, List<Dictionary<string, string>>>();
     private List<float> sortedKeys = new List<float>();
@@ -49,7 +49,9 @@ public class PatternPlayer: MonoBehaviour
         if (waitTimeLeft > 0)
         {
             if (!isPaused) waitTimeLeft -= Time.deltaTime;
-        } else {
+        }
+        else
+        {
             waitForDuration = -1f;
             waitTimeLeft = 0f;
             PlayStep();
@@ -119,6 +121,7 @@ public class PatternPlayer: MonoBehaviour
         playIndex = 0;
         waitTimeLeft = 0f;
         Id = 1;
+        tempMolesList.Clear();
     }
 
     // Returns the time to wait before playing the next action when the loaded pattern is playing.
@@ -170,7 +173,7 @@ public class PatternPlayer: MonoBehaviour
             {
                 var moleState = mole.GetState();
 
-                if (moleState == Mole.States.Enabled)
+                if (moleState == Mole.States.Enabled && !mole.GetFake())
                 {
                     return;
                 }
@@ -183,6 +186,10 @@ public class PatternPlayer: MonoBehaviour
 
                 if (moleState == Mole.States.Popping || moleState == Mole.States.Disabling)
                 {
+                    foreach (var item in tempMolesList.Where(x => x.Value.GetFake() && x.Value.GetState() == Mole.States.Enabled))
+                    {
+                        item.Value.Disable();
+                    }
                     mole.Disable();
                     waitForDuration = -1f;
                     waitTimeLeft = 0f;

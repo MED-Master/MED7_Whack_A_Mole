@@ -13,10 +13,10 @@ Facilitates the creation of moles with different behaviours on specific events
 
 public abstract class Mole : MonoBehaviour
 {
-    public enum MolePopAnswer {Ok, Fake, Expired, Disabled, Paused}
+    public enum MolePopAnswer { Ok, Fake, Expired, Disabled, Paused }
 
     // The states may be reduced to 3 - 4 (by removing Popping, enabling...), however this could reduce the control over the Mole
-    public enum States {Disabled, Enabled, Expired, Popping, Popped, Enabling, Disabling}
+    public enum States { Disabled, Enabled, Expired, Popping, Popped, Enabling, Disabling }
 
     [SerializeField]
     private float disableCooldown = 3f;
@@ -24,7 +24,7 @@ public abstract class Mole : MonoBehaviour
     protected States state = States.Disabled;
     protected bool fake = false;
 
-    private class StateUpdateEvent: UnityEvent<bool, Mole>{};
+    private class StateUpdateEvent : UnityEvent<bool, Mole> { };
     private StateUpdateEvent stateUpdateEvent = new StateUpdateEvent();
     private Coroutine timer;
     private float lifeTime;
@@ -38,6 +38,10 @@ public abstract class Mole : MonoBehaviour
     private LoggerNotifier loggerNotifier;
     private float disabledTimeLeft = 0f;
     private bool isOnDisabledCoolDown = false;
+
+    public bool GetFake() => fake;
+
+    public void SetFake(bool value) => fake = value;
 
     protected virtual void Start()
     {
@@ -94,6 +98,10 @@ public abstract class Mole : MonoBehaviour
     {
         return state;
     }
+    public bool IsFake()
+    {
+        return fake;
+    }
 
     public bool CanBeActivated()
     {
@@ -107,6 +115,7 @@ public abstract class Mole : MonoBehaviour
         lifeTime = enabledLifeTime;
         expiringTime = expiringDuration;
         spawnOrder = moleSpawnOrder;
+        SetFake(isFake);
         ChangeState(States.Enabling);
     }
 
@@ -135,7 +144,7 @@ public abstract class Mole : MonoBehaviour
         if (isPaused) return MolePopAnswer.Paused;
         if (state != States.Enabled && state != States.Enabling && state != States.Expired) return MolePopAnswer.Disabled;
 
-        Vector3 localHitPoint = Quaternion.AngleAxis(-transform.rotation.y,Vector3.up) * (hitPoint - transform.position);
+        Vector3 localHitPoint = Quaternion.AngleAxis(-transform.rotation.y, Vector3.up) * (hitPoint - transform.position);
 
         if (state == States.Expired)
         {
@@ -148,7 +157,7 @@ public abstract class Mole : MonoBehaviour
             return MolePopAnswer.Expired;
         }
 
-        if (!fake) 
+        if (!fake)
         {
             loggerNotifier.NotifyLogger("Mole Hit", EventLogger.EventType.MoleEvent, new Dictionary<string, object>()
             {
@@ -160,7 +169,7 @@ public abstract class Mole : MonoBehaviour
             ChangeState(States.Popping);
             return MolePopAnswer.Ok;
         }
-        else 
+        else
         {
             loggerNotifier.NotifyLogger("Fake Mole Hit", EventLogger.EventType.MoleEvent, new Dictionary<string, object>()
             {
@@ -197,29 +206,29 @@ public abstract class Mole : MonoBehaviour
         return stateUpdateEvent;
     }
 
-    protected virtual void PlayEnable() {}
-    protected virtual void PlayDisable() {}
-    protected virtual void PlayReset() {}
-    protected virtual void PlayHoverEnter() {}
-    protected virtual void PlayHoverLeave() {}
+    protected virtual void PlayEnable() { }
+    protected virtual void PlayDisable() { }
+    protected virtual void PlayReset() { }
+    protected virtual void PlayHoverEnter() { }
+    protected virtual void PlayHoverLeave() { }
 
     /*
     Transition states. Need to be called at the end of its override in the derived class to
     finish the transition.
     */
-    protected virtual void PlayEnabling() 
+    protected virtual void PlayEnabling()
     {
         ChangeState(States.Enabled);
     }
-    protected virtual void PlayDisabling() 
+    protected virtual void PlayDisabling()
     {
         ChangeState(States.Expired);
     }
-    protected virtual void PlayPop() 
+    protected virtual void PlayPop()
     {
         ChangeState(States.Popped);
     }
-     
+
     private void ChangeState(States newState)
     {
         if (newState == state)
@@ -234,7 +243,7 @@ public abstract class Mole : MonoBehaviour
     // Does certain actions when leaving a state.
     private void LeaveState(States state)
     {
-        switch(state)
+        switch (state)
         {
             case States.Disabled:
                 break;
@@ -253,7 +262,7 @@ public abstract class Mole : MonoBehaviour
     // Does certain actions when entering a state.
     private void EnterState(States state)
     {
-        switch(state)
+        switch (state)
         {
             case States.Disabled:
                 PlayDisable();

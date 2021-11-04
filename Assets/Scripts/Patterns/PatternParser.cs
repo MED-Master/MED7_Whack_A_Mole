@@ -73,7 +73,7 @@ public class PatternParser
                     float waitTime = float.Parse(extractedProperties["TIME"], System.Globalization.CultureInfo.InvariantCulture);
                     playTime += waitTime;
                 }
-                else if(parameterValue[1] == "HIT")
+                else if (parameterValue[1] == "HIT")
                 {
                     SetParadigm(Paradigm.Progression);
                     playTime += tempLifetime;
@@ -95,10 +95,15 @@ public class PatternParser
                 moleDelay = tempPlayTime + float.Parse(extractedProperties["LIFETIME"], System.Globalization.CultureInfo.InvariantCulture);
                 tempLifetime = float.Parse(extractedProperties["LIFETIME"], System.Globalization.CultureInfo.InvariantCulture);
             }
+            else if (keyValue[0] == "DISTRACTOR")
+            {
+                moleCount++;
+                SetMoleCount(moleCount);
+            }
 
-            // Add the extracted property to the dictionary
+                // Add the extracted property to the dictionary
 
-            Dictionary<string, string> returnProperties = new Dictionary<string, string>(){{"FUNCTION",keyValue[0]}};
+                Dictionary<string, string> returnProperties = new Dictionary<string, string>(){{"FUNCTION",keyValue[0]}};
 
             foreach (KeyValuePair<string, string> property in extractedProperties)
             {

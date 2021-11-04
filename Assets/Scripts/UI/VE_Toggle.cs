@@ -8,7 +8,7 @@ public class VE_Toggle : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        VE.SetActive(true);
+        VE.SetActive(false);
     }
 
     // Update is called once per frame

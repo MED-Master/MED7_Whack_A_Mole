@@ -29,7 +29,7 @@ public class PatternInterface : MonoBehaviour
     {
         listMoleId.Add(value);
     }
-    
+
     void Awake()
     {
         patternPlayer = FindObjectOfType<PatternPlayer>();
@@ -55,73 +55,73 @@ public class PatternInterface : MonoBehaviour
         action.Keys.CopyTo(keys, 0);
 
         // If one of the argument is "RAND", replaces it with the random variable.
-        foreach(string key in keys)
+        foreach (string key in keys)
         {
             if (action[key] == "RAND") action[key] = randVar.ToString();
         }
 
         // Matches the "FUNCTION" key, corresponding to the action to do.
-        switch(action["FUNCTION"])
+        switch (action["FUNCTION"])
         {
-                        
+
             case "START":
                 CallPlay();
                 break;
-            
+
             case "STOP":
                 CallStop();
                 break;
-            
+
             case "WALL":
                 try
                 {
                     SetWall(action);
                 }
-                catch(System.Exception e)
+                catch (System.Exception e)
                 {
                     Debug.LogError("Error in WALL: " + e.Message);
                 }
                 break;
-            
+
             case "MOLE":
                 try
                 {
                     SetMole(action["X"], action["Y"], action["LIFETIME"]);
                 }
-                catch(System.Exception e)
+                catch (System.Exception e)
                 {
                     Debug.LogError("Error in MOLE: " + e.Message);
                 }
                 break;
-            
+
             case "DISTRACTOR":
                 try
                 {
                     SetDistractor(action["X"], action["Y"], action["LIFETIME"]);
                 }
-                catch(System.Exception e)
+                catch (System.Exception e)
                 {
                     Debug.LogError("Error in MOLE: " + e.Message);
                 }
                 break;
-            
+
             case "DIFFICULTY":
                 try
                 {
                     SetDifficulty(action["SPEED"]);
                 }
-                catch(System.Exception e)
+                catch (System.Exception e)
                 {
                     Debug.LogError("Error in DIFFICULTY: " + e.Message);
                 }
                 break;
-            
+
             case "MODIFIER":
                 try
                 {
                     SetModifier(action);
                 }
-                catch(System.Exception e)
+                catch (System.Exception e)
                 {
                     Debug.LogError("Error in MODIFIER: " + e.Message);
                 }
@@ -132,18 +132,18 @@ public class PatternInterface : MonoBehaviour
                 {
                     SetSegment(action["ID"], action["LABEL"]);
                 }
-                catch(System.Exception e)
+                catch (System.Exception e)
                 {
                     Debug.LogError("Error in SEGMENT: " + e.Message);
                 }
                 break;
-            
+
             case "RANDGEN":
                 try
                 {
                     RegenRand(ParseFloat(action["STARTVALUE"]), ParseFloat(action["ENDVALUE"]), bool.Parse(action["ISINT"]));
                 }
-                catch(System.Exception e)
+                catch (System.Exception e)
                 {
                     Debug.LogError("Error in RANDGEN: " + e.Message);
                 }
@@ -233,6 +233,7 @@ public class PatternInterface : MonoBehaviour
     private void SetDistractor(string xIndex, string yIndex, string lifeTime)
     {
         int moleId = ((int.Parse(xIndex)) * 100) + (int.Parse(yIndex));
+        SetListMoleId(moleId);
         wallManager.ActivateMole(moleId, ParseFloat(lifeTime), gameDirector.GetMoleExpiringDuration(), true);
     }
 
@@ -246,10 +247,10 @@ public class PatternInterface : MonoBehaviour
     private void SetModifier(Dictionary<string, string> action)
     {
         string tempValue;
-        
+
         if (action.TryGetValue("EYEPATCH", out tempValue))
         {
-            modifiersManager.SetEyePatch((ModifiersManager.EyePatch)System.Enum.Parse( typeof(ModifiersManager.EyePatch), tempValue));
+            modifiersManager.SetEyePatch((ModifiersManager.EyePatch)System.Enum.Parse(typeof(ModifiersManager.EyePatch), tempValue));
         }
         if (action.TryGetValue("MIRROR", out tempValue))
         {
@@ -261,7 +262,7 @@ public class PatternInterface : MonoBehaviour
         }
         if (action.TryGetValue("MAINCONTROLLER", out tempValue))
         {
-            modifiersManager.SetMainController((ModifiersManager.ControllerSetup)System.Enum.Parse( typeof(ModifiersManager.ControllerSetup), tempValue));
+            modifiersManager.SetMainController((ModifiersManager.ControllerSetup)System.Enum.Parse(typeof(ModifiersManager.ControllerSetup), tempValue));
             motorspaceManager.SetActiveMotorSpace(tempValue);
         }
         if (action.TryGetValue("PRISM", out tempValue))
@@ -270,7 +271,7 @@ public class PatternInterface : MonoBehaviour
         }
         if (action.TryGetValue("HIDEWALL", out tempValue))
         {
-            modifiersManager.SetHideWall((ModifiersManager.HideWall)System.Enum.Parse( typeof(ModifiersManager.HideWall), tempValue));
+            modifiersManager.SetHideWall((ModifiersManager.HideWall)System.Enum.Parse(typeof(ModifiersManager.HideWall), tempValue));
         }
         if (action.TryGetValue("HIDEWALLAMOUNT", out tempValue))
         {
@@ -282,7 +283,8 @@ public class PatternInterface : MonoBehaviour
         }
     }
 
-    private void SetSegment(string Idval, string label) {
+    private void SetSegment(string Idval, string label)
+    {
         loggerNotifier.NotifyLogger(overrideEventParameters: new Dictionary<string, object>(){
             {"PatternSegmentID", Idval},
             {"PatternSegmentLabel", label}
