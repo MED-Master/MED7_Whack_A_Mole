@@ -24,19 +24,20 @@ public class PatternPlayer : MonoBehaviour
     private PatternInterface patternInterface;
     private WallManager wallManager;
     private PatternParser patternParser;
-    private GameDirector gameDirector;
 
     void Awake()
     {
         patternInterface = FindObjectOfType<PatternInterface>();
         wallManager = FindObjectOfType<WallManager>();
-        gameDirector = FindObjectOfType<GameDirector>();
         patternParser = new PatternParser();
     }
 
     void Update()
     {
-        ProgressionParadigm();
+        if (patternParser.GetParadigm() == PatternParser.Paradigm.Progression)
+        {
+            ProgressionParadigm();
+        }
 
         // Check whether we need to wait.
         if (waitForDuration == -1f) return;
@@ -134,6 +135,8 @@ public class PatternPlayer : MonoBehaviour
     // Plays a step from the pattern and triggers the wait to play the next step (if the current step isn't the last).
     private void PlayStep()
     {
+        wallManager.SetSpawnOrder(playIndex);
+
         foreach (Dictionary<string, string> action in pattern[sortedKeys[playIndex]])
         {
             patternInterface.PlayAction(new Dictionary<string, string>(action));
@@ -146,7 +149,7 @@ public class PatternPlayer : MonoBehaviour
             Mole mole = moles[moleCoord];
             var spawnOrder = mole.GetSpawnOrder();
 
-            if (spawnOrder + 1 == Id)
+            if (spawnOrder == playIndex)
             {
                 int moleId = Convert.ToInt32(string.Format("{0}{1}", Id, moleCoord));
                 tempMolesList.Add(moleId, mole);
@@ -164,42 +167,39 @@ public class PatternPlayer : MonoBehaviour
     //Check if the pattern is a progression paradigm
     public void ProgressionParadigm()
     {
-        if (patternParser.GetParadigm() == PatternParser.Paradigm.Progression)
+        var moles = wallManager.GetMoles();
+        int moleCount = patternParser.GetMoleCount();
+
+        foreach (var mole in moles.Values)
         {
-            var moles = wallManager.GetMoles();
-            int moleCount = patternParser.GetMoleCount();
+            var moleState = mole.GetState();
 
-            foreach (var mole in moles.Values)
+            if (moleState == Mole.States.Enabled && !mole.GetFake())
             {
-                var moleState = mole.GetState();
+                return;
+            }
+        }
 
-                if (moleState == Mole.States.Enabled && !mole.GetFake())
+        foreach (var mole in tempMolesList.Values)
+        {
+            var moleState = mole.GetState();
+            var spawnOrder = mole.GetSpawnOrder();
+
+            if (moleState == Mole.States.Popping || moleState == Mole.States.Disabling)
+            {
+                foreach (var fake in tempMolesList.Where(fake => fake.Value.GetFake() && fake.Value.GetState() == Mole.States.Enabled))
                 {
-                    return;
+                    fake.Value.Disable();
                 }
+                mole.Disable();
+                waitForDuration = -1f;
+                waitTimeLeft = 0f;
+                PlayStep();
             }
 
-            foreach (var mole in tempMolesList.Values)
+            if ((playIndex == sortedKeys.Count && moleState == Mole.States.Popped) || (playIndex == sortedKeys.Count - 1 && moleState == Mole.States.Expired))
             {
-                var moleState = mole.GetState();
-                var spawnOrder = mole.GetSpawnOrder();
-
-                if (moleState == Mole.States.Popping || moleState == Mole.States.Disabling)
-                {
-                    foreach (var item in tempMolesList.Where(x => x.Value.GetFake() && x.Value.GetState() == Mole.States.Enabled))
-                    {
-                        item.Value.Disable();
-                    }
-                    mole.Disable();
-                    waitForDuration = -1f;
-                    waitTimeLeft = 0f;
-                    PlayStep();
-                }
-
-                if ((spawnOrder == moleCount - 1 && moleState == Mole.States.Popped) || (spawnOrder == moleCount - 1 && moleState == Mole.States.Expired))
-                {
-                    gameDirector.StopGame();
-                }
+                patternInterface.CallStop();
             }
         }
     }

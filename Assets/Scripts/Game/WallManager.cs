@@ -7,7 +7,8 @@ using UnityEngine.Events;
 Spawns, references and activates the moles. Is the only component to directly interact with the moles.
 */
 
-public class WallInfo {
+public class WallInfo
+{
     public bool active = false;
     public Dictionary<int, Mole> moles;
     public Vector3 wallSize;
@@ -22,7 +23,8 @@ public class WallInfo {
 }
 
 [System.Serializable]
-public class WallSettings {
+public class WallSettings
+{
     public Mole moleObject;
     public int rowCount;
     public int columnCount;
@@ -97,6 +99,7 @@ public class WallManager : MonoBehaviour
     private float updateCooldownDuration = .1f;
     private LoggerNotifier loggerNotifier;
     private int moleCount = 0;
+    private int spawnOrder = 0;
     private bool wallVisible = true;
 
     // Wall boundaries
@@ -151,7 +154,7 @@ public class WallManager : MonoBehaviour
 
         moles = new Dictionary<int, Mole>();
         wallGenerator = gameObject.GetComponent<WallGenerator>();
-        wallCenter = new Vector3(wallSize.x/2f, wallSize.y/2f, 0);
+        wallCenter = new Vector3(wallSize.x / 2f, wallSize.y / 2f, 0);
         isInit = true;
     }
 
@@ -160,16 +163,20 @@ public class WallManager : MonoBehaviour
     {
         if (wallVisible == value) return;
         wallVisible = value;
-        if (!wallVisible) {
+        if (!wallVisible)
+        {
             wallGenerator.SetMeshMaterial(invisibleMaterial);
             greyBackground.enabled = true;
-        } else {
+        }
+        else
+        {
             wallGenerator.ResetMeshMaterial();
             greyBackground.enabled = false;
         }
     }
 
-    public void SetDefaultWall() {
+    public void SetDefaultWall()
+    {
         moleObject = defaultWall.moleObject;
         rowCount = defaultWall.rowCount;
         columnCount = defaultWall.columnCount;
@@ -181,7 +188,8 @@ public class WallManager : MonoBehaviour
         moleScale = defaultWall.moleScale;
     }
 
-    private void UpdateWallLogs() {
+    private void UpdateWallLogs()
+    {
         MeshRenderer mesh = GetComponent<MeshRenderer>();
         float boundsXmax = -1f;
         float boundsXmin = -1f;
@@ -192,7 +200,8 @@ public class WallManager : MonoBehaviour
         float boundsZcenter = -1f;
         float boundsZmax = -1f;
         float boundsZmin = -1f;
-        if (mesh != null) {
+        if (mesh != null)
+        {
             boundsXmax = mesh.bounds.max.x;
             boundsYmax = mesh.bounds.max.y;
             boundsZmax = mesh.bounds.max.z;
@@ -253,7 +262,8 @@ public class WallManager : MonoBehaviour
         stateUpdateEvent.Invoke(wallInfo);
     }
 
-    public WallInfo CreateWallInfo() {
+    public WallInfo CreateWallInfo()
+    {
         var wallInfo = new WallInfo();
         wallInfo.active = active;
         wallInfo.moles = moles;
@@ -283,17 +293,22 @@ public class WallManager : MonoBehaviour
     {
         if (!active) return;
         if (!moles.ContainsKey(moleId)) return;
-        moles[moleId].Enable(lifeTime, moleExpiringDuration, isFake, moleCount);
+        moles[moleId].Enable(lifeTime, moleExpiringDuration, isFake, spawnOrder);
         moleCount++;
     }
 
     // Pauses/unpauses the moles
     public void SetPauseMole(bool pause)
     {
-        foreach(Mole mole in moles.Values)
+        foreach (Mole mole in moles.Values)
         {
             mole.SetPause(pause);
         }
+    }
+
+    public void SetSpawnOrder(int value)
+    {
+        spawnOrder = value;
     }
 
     public void UpdateMoleCount(int newRowCount = -1, int newColumnCount = -1)
@@ -313,14 +328,14 @@ public class WallManager : MonoBehaviour
 
     public void UpdateWallCurveRatio(float newCurveRatioX = -1, float newCurveRatioY = -1)
     {
-        if (newCurveRatioX >= 0 && newCurveRatioX <= 1 ) xCurveRatio = newCurveRatioX;
-        if (newCurveRatioY >= 0 && newCurveRatioY <= 1 ) yCurveRatio = newCurveRatioY;
+        if (newCurveRatioX >= 0 && newCurveRatioX <= 1) xCurveRatio = newCurveRatioX;
+        if (newCurveRatioY >= 0 && newCurveRatioY <= 1) yCurveRatio = newCurveRatioY;
         // UpdateWall();
     }
 
     public void UpdateWallMaxAngle(float newMaxAngle)
     {
-        if (newMaxAngle >= 0 && newMaxAngle <= 90 ) maxAngle = newMaxAngle;
+        if (newMaxAngle >= 0 && newMaxAngle <= 90) maxAngle = newMaxAngle;
         // UpdateWall();
     }
 
@@ -357,7 +372,7 @@ public class WallManager : MonoBehaviour
     }
     private void disableMoles()
     {
-        foreach(Mole mole in moles.Values)
+        foreach (Mole mole in moles.Values)
         {
             mole.Reset();
         }
@@ -365,7 +380,7 @@ public class WallManager : MonoBehaviour
 
     private void DestroyWall()
     {
-        foreach(Mole mole in moles.Values)
+        foreach (Mole mole in moles.Values)
         {
             Destroy(mole.gameObject);
         }
@@ -378,7 +393,7 @@ public class WallManager : MonoBehaviour
     {
         wallGenerator.InitPointsLists(columnCount, rowCount);
         // Updates the wallCenter value
-        wallCenter = new Vector3(wallSize.x/2f, wallSize.y/2f, 0);
+        wallCenter = new Vector3(wallSize.x / 2f, wallSize.y / 2f, 0);
 
         highestX = -1f;
         highestY = -1f;
@@ -392,7 +407,7 @@ public class WallManager : MonoBehaviour
         {
             for (int y = 0; y < rowCount; y++)
             {
-                if((x == 0 || x == columnCount - 1) && (y == rowCount - 1 || y == 0))
+                if ((x == 0 || x == columnCount - 1) && (y == rowCount - 1 || y == 0))
                 {
                     wallGenerator.AddPoint(x, y, DefineMolePos(x, y), DefineMoleRotation(x, y));
                     continue;
@@ -419,9 +434,9 @@ public class WallManager : MonoBehaviour
                 if (highestX == -1f) highestX = mole.transform.position.x;
                 if (lowestX == -1f) lowestX = mole.transform.position.x;
                 if (highestY == -1f) highestY = mole.transform.position.y;
-                if(lowestY == -1f) lowestY = mole.transform.position.y;
-                if(lowestZ == -1f) lowestZ = mole.transform.position.z;
-                if(highestZ == -1f) highestZ = mole.transform.position.z;
+                if (lowestY == -1f) lowestY = mole.transform.position.y;
+                if (lowestZ == -1f) lowestZ = mole.transform.position.z;
+                if (highestZ == -1f) highestZ = mole.transform.position.z;
 
                 highestX = mole.transform.position.x > highestX ? mole.transform.position.x : highestX;
                 lowestX = mole.transform.position.x < lowestX ? mole.transform.position.x : lowestX;
@@ -448,8 +463,8 @@ public class WallManager : MonoBehaviour
     // Gets the Mole position depending on its index, the wall size (x and y axes of the vector3), and also on the curve coefficient (for the z axis).
     private Vector3 DefineMolePos(int xIndex, int yIndex)
     {
-        float angleX = ((((float)xIndex/(columnCount - 1)) * 2) - 1) * ((Mathf.PI * xCurveRatio) / 2);
-        float angleY = ((((float)yIndex/(rowCount - 1)) * 2) - 1) * ((Mathf.PI * yCurveRatio) / 2);
+        float angleX = ((((float)xIndex / (columnCount - 1)) * 2) - 1) * ((Mathf.PI * xCurveRatio) / 2);
+        float angleY = ((((float)yIndex / (rowCount - 1)) * 2) - 1) * ((Mathf.PI * yCurveRatio) / 2);
 
         return new Vector3(Mathf.Sin(angleX) * (wallSize.x / (2 * xCurveRatio)), Mathf.Sin(angleY) * (wallSize.y / (2 * yCurveRatio)), ((Mathf.Cos(angleY) * (wallSize.z)) + (Mathf.Cos(angleX) * (wallSize.z))));
     }
@@ -468,7 +483,7 @@ public class WallManager : MonoBehaviour
     private Quaternion DefineMoleRotation(int xIndex, int yIndex)
     {
         Quaternion lookAngle = new Quaternion();
-        lookAngle.eulerAngles = new Vector3(-((((float)yIndex/(rowCount - 1)) * 2) - 1) * (maxAngle * yCurveRatio), ((((float)xIndex/(columnCount - 1)) * 2) - 1) * (maxAngle * xCurveRatio), 0f);
+        lookAngle.eulerAngles = new Vector3(-((((float)yIndex / (rowCount - 1)) * 2) - 1) * (maxAngle * yCurveRatio), ((((float)xIndex / (columnCount - 1)) * 2) - 1) * (maxAngle * xCurveRatio), 0f);
         return lookAngle;
     }
 
@@ -476,7 +491,7 @@ public class WallManager : MonoBehaviour
     {
         yield return new WaitForSeconds(updateCooldownDuration);
 
-        if(active)
+        if (active)
         {
             Clear();
             Enable();
