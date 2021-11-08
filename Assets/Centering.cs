@@ -39,7 +39,7 @@ public class Centering : MonoBehaviour
             Vector3 offsetPos = cameraRig.position - steamCamera.position;
             // Reposition CameraRig to desired position minus offset
             cameraRig.position = desiredHeadPos.position;
-            offsetPos.y = -offsetPos.y - 0.5f;
+            offsetPos.y = -offsetPos.y - 0.75f;
             cameraRig.position = offsetPos;
             //cameraRig.position.Set(offsetPos.x, offsetPos.y, offsetPos.z); //offsetPos;
             //cameraRig.position = [offsetPos.x, offsetPos.y, offsetPos.z];
