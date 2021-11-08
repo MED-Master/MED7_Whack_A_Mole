@@ -110,7 +110,7 @@ Material:
     - _TilingN3: 1
     - _UVSec: 0
     - _WindForce: 0.12
-    - _WindMovement: 0.19
+    - _WindMovement: -0.06
     - _ZWrite: 1
     - __NumberOfStacks: 1
     m_Colors:
