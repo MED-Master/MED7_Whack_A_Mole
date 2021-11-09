@@ -131,7 +131,6 @@ public class PatternParser
         {
             parsedPattern.Add(playTime, new List<Dictionary<string, string>>());
         }
-
         return parsedPattern;
     }
 

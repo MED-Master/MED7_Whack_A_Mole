@@ -147,12 +147,12 @@ public class GameDirector : MonoBehaviour
 
         if(patternManager.PlayPattern())
         {
-            gameDuration = patternManager.GetPatternDuration();
+            gameDuration = 600f;
             loggerNotifier.NotifyLogger(overrideEventParameters: new Dictionary<string, object>()
             {
-                {"GameDuration", patternManager.GetPatternDuration()}
+                {"GameDuration", gameDuration}
             });
-            StartCoroutine(WaitEndGame(patternManager.GetPatternDuration()));
+            StartCoroutine(WaitEndGame(gameDuration));
         }
         else
         {
