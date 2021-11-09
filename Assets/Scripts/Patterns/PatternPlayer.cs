@@ -150,13 +150,14 @@ public class PatternPlayer : MonoBehaviour
             var moles = wallManager.GetMoles();
             Mole mole = moles[moleCoord];
             var spawnOrder = mole.GetSpawnOrder();
-            int moleCount = patternParser.GetMoleCount();
+            int moleCount = patternParser.GetMoleCount();//Is only called in the PlayStep() to print the total amount of mole in the pattern
 
             if (spawnOrder == playIndex)
             {
                 int moleId = Convert.ToInt32(string.Format("{0}{1}", Id, moleCoord));
                 tempMolesList.Add(moleId, mole);
                 Id++;
+                //Used to print out the current number of moles and total moles(assuming Red and green pairs.)
                 Debug.Log("Green moles played " +((Id - 3) / 2) + " out of " + (moleCount/2));
             }
         }
