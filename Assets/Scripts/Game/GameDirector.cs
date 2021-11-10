@@ -147,7 +147,7 @@ public class GameDirector : MonoBehaviour
 
         if(patternManager.PlayPattern())
         {
-            gameDuration = 600f;
+            gameDuration = 630f;
             loggerNotifier.NotifyLogger(overrideEventParameters: new Dictionary<string, object>()
             {
                 {"GameDuration", gameDuration}
